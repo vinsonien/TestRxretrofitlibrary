@@ -1,0 +1,38 @@
+apply plugin: 'com.android.library'
+apply plugin: 'org.greenrobot.greendao'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        minSdkVersion 19
+        versionCode 1
+        versionName "1.0"
+    }
+}
+
+greendao {
+    schemaVersion 1
+    daoPackage 'com.wzgiceman.rxretrofitlibrary.retrofit_rx.gen'
+    targetGenDir 'src/main/java'
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    api 'org.greenrobot:greendao:3.2.2'
+    /*rx-android-java*/
+    api 'com.trello:rxlifecycle:1.0'
+    api 'com.trello:rxlifecycle-components:1.0'
+    /*rotrofit*/
+    api 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+    //    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+//    implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
+//    implementation 'com.squareup.okhttp3:logging-interceptor:3.1.2'
+
+    api 'com.squareup.retrofit2:retrofit:2.3.0'
+    api 'com.squareup.retrofit2:converter-gson:2.3.0'
+    //ConverterFactory的Gson依赖包
+    api 'com.squareup.retrofit2:converter-scalars:2.3.0'
+    //ConverterFactory的String依赖包
+    api 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+
+}
