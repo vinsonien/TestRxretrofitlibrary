@@ -1,12 +1,30 @@
 apply plugin: 'com.android.library'
 apply plugin: 'org.greenrobot.greendao'
 
+
+// 当模块必须声明为com.android.library时才能使用，否则会报错
+apply plugin: "guru.stefma.bintrayrelease"
+version = "1.2.0"
+group = "com.lws" //jcenter的路径,可以随便自定义
+//当前这个bintrayRelease依赖于AndroidArtifacts
+androidArtifact {
+    artifactId = "bintrayrelease"
+}
+publish {
+    userOrg = 'vinsonien' //bintray用户名
+    repoName = 'XOXO' //要传过去的库名
+    artifactId = 'rxretrofitlibrary' //要传过去的项目名
+    desc = '添加 腾讯x5 webview的封装' //描述
+    website = 'https://github.com/vinsonien/TestRxretrofitlibrary' // 项目网站，尽量用对，因为在之后上传到jcenter的时候会检查，不过那个时候再改也没问题
+}
+
+
 android {
     compileSdkVersion 28
     defaultConfig {
         minSdkVersion 19
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.2.0"
     }
 }
 
@@ -25,14 +43,13 @@ dependencies {
     /*rotrofit*/
     api 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
     //    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-//    implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
-//    implementation 'com.squareup.okhttp3:logging-interceptor:3.1.2'
-
+    //    implementation 'com.squareup.retrofit2:converter-scalars:2.4.0'
+    //    implementation 'com.squareup.okhttp3:logging-interceptor:3.1.2'
     api 'com.squareup.retrofit2:retrofit:2.3.0'
     api 'com.squareup.retrofit2:converter-gson:2.3.0'
     //ConverterFactory的Gson依赖包
     api 'com.squareup.retrofit2:converter-scalars:2.3.0'
     //ConverterFactory的String依赖包
     api 'com.squareup.okhttp3:logging-interceptor:3.4.1'
-
+    implementation files('libs/tbs_sdk_thirdapp_v3.6.0.1310_43612_sharewithdownload_withoutGame_obfs_20180706_163319.jar')
 }
