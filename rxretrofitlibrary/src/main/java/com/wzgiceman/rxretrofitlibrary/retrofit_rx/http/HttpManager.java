@@ -3,7 +3,9 @@ package com.wzgiceman.rxretrofitlibrary.retrofit_rx.http;
 import android.util.Log;
 
 import com.trello.rxlifecycle.android.ActivityEvent;
+import com.trello.rxlifecycle.android.FragmentEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+import com.trello.rxlifecycle.components.support.RxFragment;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.Api.BaseApi;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.RxRetrofitApp;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.exception.RetryWhenNetworkException;
@@ -34,6 +36,7 @@ public class HttpManager {
     private SoftReference<HttpOnNextListener> onNextListener;
     private SoftReference<HttpOnNextSubListener> onNextSubListener;
     private SoftReference<RxAppCompatActivity> appCompatActivity;
+    private SoftReference<RxFragment> appFragment;
 
     public HttpManager(HttpOnNextListener onNextListener, RxAppCompatActivity appCompatActivity) {
         this.onNextListener = new SoftReference(onNextListener);
@@ -48,6 +51,21 @@ public class HttpManager {
     public HttpManager(RxAppCompatActivity appCompatActivity) {
         this.appCompatActivity = new SoftReference(appCompatActivity);
     }
+
+    public HttpManager(HttpOnNextListener onNextListener, RxFragment appFragment) {
+        this.onNextListener = new SoftReference(onNextListener);
+        this.appFragment = new SoftReference(appFragment);
+    }
+
+    public HttpManager(HttpOnNextSubListener onNextSubListener, RxFragment appFragment) {
+        this.onNextSubListener = new SoftReference(onNextSubListener);
+        this.appFragment = new SoftReference(appFragment);
+    }
+
+    public HttpManager(RxFragment appFragment) {
+        this.appFragment = new SoftReference(appFragment);
+    }
+
 
     public HttpManager() {
 
@@ -114,6 +132,8 @@ public class HttpManager {
         /*生命周期管理*/
         if (appCompatActivity != null) {
             observable.compose(appCompatActivity.get().bindUntilEvent(ActivityEvent.DESTROY));
+        }else if(appFragment != null){
+            observable.compose(appFragment.get().bindUntilEvent(FragmentEvent.DESTROY));
         }
 
         /*是否不需要处理sub对象*/
@@ -128,8 +148,14 @@ public class HttpManager {
 
         /*数据String回调*/
         if (onNextListener != null && null != onNextListener.get()) {
-            ProgressSubscriber subscriber = new ProgressSubscriber(basePar, onNextListener, appCompatActivity);
-            observable.subscribe(subscriber);
+            ProgressSubscriber subscriber;
+            if (appCompatActivity != null) {
+                subscriber = new ProgressSubscriber(basePar, onNextListener, appCompatActivity);
+                observable.subscribe(subscriber);
+            }else if(appFragment != null){
+                subscriber = new ProgressSubscriber(basePar, onNextListener, appFragment);
+                observable.subscribe(subscriber);
+            }
         }
 
         return observable;

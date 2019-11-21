@@ -2,7 +2,6 @@ package com.test.sdk.testrxretrofitlibrary;
 
 import android.app.Application;
 
-import com.wzgiceman.rxretrofitlibrary.retrofit_rx.RxRetrofitApp;
 
 /**
  * @author: S
@@ -22,7 +21,6 @@ public class MyApp extends Application {
     /**
      * RxRetrofit 修改域名
      */
-    private void InitRxRetrofit(boolean isDebug) {
-        RxRetrofitApp.init(this, isDebug, "填写您的域名");
+    private void InitRxRetrofit(boolean isDebug){
     }
 }

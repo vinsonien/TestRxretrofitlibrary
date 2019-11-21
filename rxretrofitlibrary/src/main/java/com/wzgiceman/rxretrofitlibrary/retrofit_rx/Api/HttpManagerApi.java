@@ -1,6 +1,7 @@
 package com.wzgiceman.rxretrofitlibrary.retrofit_rx.Api;
 
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
+import com.trello.rxlifecycle.components.support.RxFragment;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.http.HttpManager;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpOnNextListener;
 import com.wzgiceman.rxretrofitlibrary.retrofit_rx.listener.HttpOnNextSubListener;
@@ -22,6 +23,15 @@ public class HttpManagerApi extends BaseApi {
     public HttpManagerApi(HttpOnNextSubListener onNextSubListener, RxAppCompatActivity appCompatActivity) {
         manager = new HttpManager(onNextSubListener, appCompatActivity);
     }
+
+    public HttpManagerApi(HttpOnNextListener onNextListener, RxFragment rxFragment) {
+        manager = new HttpManager(onNextListener, rxFragment);
+    }
+
+    public HttpManagerApi(HttpOnNextSubListener onNextSubListener, RxFragment rxFragment) {
+        manager = new HttpManager(onNextSubListener, rxFragment);
+    }
+
 
     protected Retrofit getRetrofit() {
         return manager.getReTrofit(this);
