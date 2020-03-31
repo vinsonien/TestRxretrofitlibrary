@@ -40,6 +40,12 @@ public class HttpManager {
     private SoftReference<RxAppCompatActivity> appCompatActivity;
     private SoftReference<RxFragment> appFragment;
 
+
+    private ExceptionFunc exceptionFunc;
+    private ResulteFunc resulteFunc;
+
+
+
     public HttpManager(HttpOnNextListener onNextListener, RxAppCompatActivity appCompatActivity) {
         this.onNextListener = new SoftReference(onNextListener);
         this.appCompatActivity = new SoftReference(appCompatActivity);
@@ -124,11 +130,11 @@ public class HttpManager {
                 .retryWhen(new RetryWhenNetworkException(basePar.getRetryCount(),
                         basePar.getRetryDelay(), basePar.getRetryIncreaseDelay()))
                 /*异常处理*/
-                .onErrorResumeNext(new ExceptionFunc())
+                .onErrorResumeNext(getExceptionFunc()==null?new ExceptionFunc(): getExceptionFunc())
                 /*tokean过期统一处理*/
 //                .flatMap(new TokeanFunc(basePar, retrofit))
                 /*返回数据统一判断*/
-                .map(new ResulteFunc())
+                .map(getResulteFunc()==null?new ResulteFunc():getResulteFunc())
                 /*http请求线程*/
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
@@ -165,6 +171,22 @@ public class HttpManager {
         }
 
         return observable;
+    }
+
+    public ExceptionFunc getExceptionFunc() {
+        return exceptionFunc;
+    }
+
+    public void setExceptionFunc(ExceptionFunc exceptionFunc) {
+        this.exceptionFunc = exceptionFunc;
+    }
+
+    public ResulteFunc getResulteFunc() {
+        return resulteFunc;
+    }
+
+    public void setResulteFunc(ResulteFunc resulteFunc) {
+        this.resulteFunc = resulteFunc;
     }
 
     /**
