@@ -2,6 +2,7 @@ package com.wzgiceman.rxretrofitlibrary.retrofit_rx.http;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.trello.rxlifecycle.android.ActivityEvent;
 import com.trello.rxlifecycle.android.FragmentEvent;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
@@ -22,6 +23,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -96,10 +98,14 @@ public class HttpManager {
             builder.addInterceptor(getHttpLoggingInterceptor());
         }
 
+        GsonConverterFactory gsonConverterFactory = GsonConverterFactory.create(new Gson());
+        ScalarsConverterFactory scalarsConverterFactory = ScalarsConverterFactory.create();
+
         /*创建retrofit对象*/
         final Retrofit retrofit = new Retrofit.Builder()
                 .client(builder.build())
-                .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(scalarsConverterFactory)
+                .addConverterFactory(gsonConverterFactory)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(basePar.getBaseUrl())
                 .build();

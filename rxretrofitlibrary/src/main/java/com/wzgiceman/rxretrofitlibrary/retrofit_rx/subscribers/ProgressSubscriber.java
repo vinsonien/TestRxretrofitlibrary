@@ -1,6 +1,7 @@
 package com.wzgiceman.rxretrofitlibrary.retrofit_rx.subscribers;
 
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -80,10 +81,10 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
      */
     private void initProgressDialog(boolean cancel) {
         if (!api.isShowProgress()) return;
-        Context context = mActivity.get();
-        if (pd == null && context != null) {
-            pd = new ProgressDialog(context);
-            pd.setMessage(context.getString(R.string.progressdialog_loading));
+//        Context context = mActivity.get();
+        if (pd == null && mActivity.get() != null) {
+            pd = new ProgressDialog(mActivity.get());
+            pd.setMessage(mActivity.get().getString(R.string.progressdialog_loading));
             pd.setCancelable(cancel);
             if (cancel) {
                 pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -159,8 +160,8 @@ public class ProgressSubscriber<T> extends Subscriber<T> {
      * @param e
      */
     private void errorDo(Throwable e) {
-        Context context = mActivity.get();
-        if (context == null) return;
+//        Context context = mActivity.get();
+        if (mActivity.get() == null) return;
         HttpOnNextListener httpOnNextListener = mSubscriberOnNextListener.get();
         if (httpOnNextListener == null) return;
         ApiException apiException;
